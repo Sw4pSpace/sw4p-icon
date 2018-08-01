@@ -1,0 +1,64 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="font-awesome.html">
+<link rel="stylesheet" href="../components-font-awesome/css/fontawesome-all.min.css"><!-- This is deprecated, remove when @font-face it fixed in chrome  https://bugs.chromium.org/p/chromium/issues/detail?id=336876 -->
+
+<!--
+'sw4p-header' is a component implementing FontAwesome 5
+
+Example:
+    <sw4p-icon icon="print"/>
+
+@group Sw4p Elements
+@element sw4p-icon
+@demo demo/index.html
+-->
+
+<dom-module id="sw4p-icon">
+
+    <template>
+        <style is="custom-style" include="font-awesome">
+
+        </style>
+
+        <i id="icon" class$="fa fa-[[icon]]" />
+
+    </template>
+
+    <script>
+        class Sw4pIcon extends Polymer.Element {
+            static get is() {
+                return 'sw4p-icon';
+            }
+            static get properties() {
+                return {
+                    icon: {
+                        type: String,
+                        observer: '_observeIcon'
+                    }
+                }
+            }
+            constructor() {
+                super();
+            }
+            _observeIcon() {
+
+                if(!this.icon) {
+                    throw new Error("'icon' property is required for sw4p-icon")
+                }
+
+                this._addClass(this.icon);
+            }
+            _addClass(className) {
+                this.$.icon.classList.add('fa-' + className);
+            }
+            attached() {
+                this.debounce('observeIcon', function () {
+                    this._observeIcon();
+                }).bind(this);
+            }
+        }
+        customElements.define(Sw4pIcon.is, Sw4pIcon);
+    </script>
+
+</dom-module>
+
